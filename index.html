@@ -1,22 +1,134 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+	<!-- Required meta tags -->
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<!-- Bootstrap CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
-    <title>Hello, world!</title>
-  </head>
-  <body>
-    <h1>Hello, world!</h1>
+	<script type="text/javascript">
+		function injectScript(url) {
+			var head= document.getElementsByTagName('head')[0];
+			var script= document.createElement('script');
+			script.type= 'text/javascript';
+			script.src= url;
+			head.appendChild(script);
+		}
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-  </body>
+		function addComponent(name, parameters, content) {
+			var component = document.createElement(name);
+			if (parameters) {
+				parameters.forEach(function (p) {
+					component[p.key] = p.value;
+				});
+			}
+			if (content) {
+				component.innerHTML = content;
+			}
+			$('#webComponentTarget').append(component);
+		}
+
+
+		$(function() {
+			$('#saveComponent').on('click', function () {
+				var url = $('#url').val();
+				var name = $('#name').val();
+				var key = $('#key').val();
+				var value = $('#value').val();
+				var content = $('#content').val();
+				var parameters = [];
+				if (key && value) {
+					parameters.push({key: key, value: value});
+				}
+
+				if(url && name) {
+					injectScript(url);
+					addComponent(name, parameters, content);
+					$('#webComponentModal').modal('hide');
+				} else {
+					window.alert('Please enter name and url!');
+				}
+			});
+		});
+
+	</script>
+
+	<title>Web Component Loader</title>
+</head>
+<body>
+<nav class="navbar navbar-dark bg-dark">
+	<form class="form-inline">
+		<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#webComponentModal">Add Web Component</button>
+	</form>
+</nav>
+<div class="container mt-3">
+	<div class="row">
+		<div class="col-md-12">
+			<div id="webComponentTarget">
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="webComponentModal" class="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Add Web Component</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form id="webComponentForm">
+					<div class="form-group">
+						<label for="url">URL</label>
+						<input id="url" name="url" type="text" class="form-control"  aria-describedby="urlHelp" placeholder="Enter URL">
+						<small id="urlHelp" class="form-text text-muted">eg. https://unpkg.com/my-component@0.0.1/dist/mycomponent.js</small>
+					</div>
+					<div class="form-group">
+						<label for="name">Name</label>
+						<input type="text" name="text" class="form-control" id="name" aria-describedby="nameHelp" placeholder="Enter Name">
+						<small id="nameHelp" class="form-text text-muted">eg. 'my-component'</small>
+					</div>
+					<fieldset>
+						<legend>Parameters (optional)</legend>
+						<div class="form-row">
+							<div class="col-md-6 mb-3">
+								<label for="key">Key</label>
+								<input type="text" class="form-control" id="key" name="key" value="">
+							</div>
+							<div class="col-md-6 mb-3">
+								<label for="value">Value</label>
+								<input type="text" class="form-control" id="value" name="value" value="">
+							</div>
+						</div>
+					</fieldset>
+					<fieldset>
+						<legend>Content (optional)</legend>
+						<div class="form-group">
+							<textarea id="content" name="content" class="form-control"></textarea>
+							<small class="form-text text-muted">eg. '&lt;img src="http://placekitten.com/g/640/480"&gt;</pre>'</small>
+						</div>
+					</fieldset>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button id="saveComponent" type="button" class="btn btn-primary">Save</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
 </html>
