@@ -42,7 +42,7 @@ Load up site at http://127.0.0.1:8080
 
 ## Todos
 
-- [ ] Allow setting unlimited number of parameters
+- [x] Allow setting unlimited number of parameters
 - [x] Allow adding more than one component
 - [ ] Add each component as a widget in a dashboard
 - [x] Store added components in local storage

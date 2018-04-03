@@ -19,6 +19,19 @@
 		</div>
 	</script>
 
+	<script id="templateWebComponentParameters" type="text/template">
+		<div class="form-row parameter-set">
+			<div class="col-md-6 mb-3">
+				<label for="key">Key</label>
+				<input type="text" class="form-control parameter-key" id="key" name="key" value="">
+			</div>
+			<div class="col-md-6 mb-3">
+				<label for="value">Value</label>
+				<input type="text" class="form-control parameter-value" id="value" name="value" value="">
+			</div>
+		</div>
+	</script>
+
 	<script type="text/javascript">
 		function injectScript(url) {
 			var head= document.getElementsByTagName('head')[0];
@@ -71,6 +84,11 @@
 			$('#webComponentTarget').html('');
 		}
 
+		function resetForm() {
+			$('#webComponentForm')[0].reset();
+			$(".parameter-set").remove();
+		}
+
 		$(function() {
 			loadComponents();
 
@@ -78,28 +96,45 @@
 			$('#saveComponent').on('click', function () {
 				var url = $('#url').val();
 				var name = $('#name').val();
-				var key = $('#key').val();
-				var value = $('#value').val();
 				var content = $('#content').val();
 				var parameters = [];
-				if (key && value) {
+
+				$(".parameter-set").each(function () {
+					var key = $(this).find('.parameter-key').val();
+					var value = $(this).find('.parameter-value').val();
 					parameters.push({key: key, value: value});
-				}
+				});
 
 				if(url && name) {
 					injectScript(url);
 					addComponent(name, parameters, content);
 					saveComponent({url: url, name: name, parameters: parameters, content: content});
-					$('#webComponentForm')[0].reset();
+					resetForm();
 					$('#webComponentModal').modal('hide');
 				} else {
 					window.alert('Please enter name and url!');
 				}
 			});
 
+			$('#addParameter').on('click', function () {
+				var fields = $('#templateWebComponentParameters').html();
+				fields = $('<div/>').html(fields).contents();
+				fields.find(":input").each(function() {
+					var index = $(".parameter-set").length;
+					$(this).attr("id", $(this).attr("id") + index);
+					$(this).attr("name", $(this).attr("name") + index);
+				});
+				$('#parametersFieldSet').append(fields);
+			});
+
 			$('#resetBtn').on('click', function () {
 				clearComponents();
 			});
+
+			$('#webComponentModal').on('hide.bs.modal', function (e) {
+				resetForm();
+			})
+
 		});
 
 	</script>
@@ -146,16 +181,11 @@
 					</div>
 					<fieldset>
 						<legend>Parameters (optional)</legend>
-						<div class="form-row">
-							<div class="col-md-6 mb-3">
-								<label for="key">Key</label>
-								<input type="text" class="form-control" id="key" name="key" value="">
-							</div>
-							<div class="col-md-6 mb-3">
-								<label for="value">Value</label>
-								<input type="text" class="form-control" id="value" name="value" value="">
-							</div>
+						<a id="addParameter" class="btn btn-outline-secondary btn-sm">Add Parameter</a>
+						<div id="parametersFieldSet" style="max-height: 300px; overflow-y: auto; overflow-x: hidden;">
+
 						</div>
+
 					</fieldset>
 					<fieldset>
 						<legend>Content (optional)</legend>
