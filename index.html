@@ -45,8 +45,36 @@
 			$('#webComponentTarget').append(card);
 		}
 
+		function loadComponents() {
+			var componentsStr = localStorage.getItem("components");
+			if (componentsStr) {
+				var components = JSON.parse(componentsStr);
+				components.forEach(function (component) {
+					injectScript(component.url);
+					addComponent(component.name, component.parameters, component.content);
+				});
+			}
+		}
+
+		function saveComponent(component) {
+			var components = [];
+			var componentsStr = localStorage.getItem("components");
+			if (componentsStr) {
+				components = JSON.parse(componentsStr);
+			}
+			components.push(component);
+			localStorage.setItem("components", JSON.stringify(components));
+		}
+
+		function clearComponents() {
+			localStorage.removeItem("components");
+			$('#webComponentTarget').html('');
+		}
 
 		$(function() {
+			loadComponents();
+
+
 			$('#saveComponent').on('click', function () {
 				var url = $('#url').val();
 				var name = $('#name').val();
@@ -61,11 +89,16 @@
 				if(url && name) {
 					injectScript(url);
 					addComponent(name, parameters, content);
+					saveComponent({url: url, name: name, parameters: parameters, content: content});
 					$('#webComponentForm')[0].reset();
 					$('#webComponentModal').modal('hide');
 				} else {
 					window.alert('Please enter name and url!');
 				}
+			});
+
+			$('#resetBtn').on('click', function () {
+				clearComponents();
 			});
 		});
 
@@ -76,7 +109,8 @@
 <body>
 <nav class="navbar navbar-dark bg-dark">
 	<form class="form-inline">
-		<button class="btn btn-primary" type="button" data-toggle="modal" data-target="#webComponentModal">Add Web Component</button>
+		<button class="btn btn-primary mr-2" type="button" data-toggle="modal" data-target="#webComponentModal">Add Web Component</button>
+		<button id="resetBtn" class="btn btn-default" type="button">Reset</button>
 	</form>
 </nav>
 <div class="container mt-3">

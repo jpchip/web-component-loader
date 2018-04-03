@@ -2,7 +2,8 @@
 > Test your web component here
 
 Simple page that let's you load up a web component from a cdn or unpkg.com 
-on the fly and preview it.
+on the fly and view them. Added component info is saved to local storage for
+repeated viewing.
 
 This is just hacked together with jquery as a proof of concept.
 
@@ -44,7 +45,7 @@ Load up site at http://127.0.0.1:8080
 - [ ] Allow setting unlimited number of parameters
 - [x] Allow adding more than one component
 - [ ] Add each component as a widget in a dashboard
-- [ ] Store added components in local storage
+- [x] Store added components in local storage
 
 ## Licensing
 
