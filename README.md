@@ -30,15 +30,15 @@ https://jpchip.github.io/web-component-loader/
 
 ### Setting up Dev
 
-Install some local web server. Recommend https://github.com/indexzero/http-server
+Install some local web server. Recommend [http-server](https://github.com/indexzero/http-server).
 
 ```shell
 git clone https://github.com/jpchip/web-component-loader.git
-cd your-project/
+cd web-component-loader/
 http-server
 ```
 
-Load up site at http://127.0.0.1:8080
+Load up site at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 
 ## Todos
 
@@ -46,6 +46,7 @@ Load up site at http://127.0.0.1:8080
 - [x] Allow adding more than one component
 - [ ] Add each component as a widget in a dashboard
 - [x] Store added components in local storage
+- [ ] Allow editing component parameters and content
 
 ## Licensing
 
