@@ -9,6 +9,16 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 
+	<script id="templateWebComponentCard" type="text/template">
+		<div class="card mt-1">
+			<div class="card-header">
+			</div>
+			<div class="card-body">
+
+			</div>
+		</div>
+	</script>
+
 	<script type="text/javascript">
 		function injectScript(url) {
 			var head= document.getElementsByTagName('head')[0];
@@ -28,7 +38,11 @@
 			if (content) {
 				component.innerHTML = content;
 			}
-			$('#webComponentTarget').append(component);
+			var card = $('#templateWebComponentCard').html();
+			card = $('<div/>').html(card).contents();
+			card.find('.card-header').text(name);
+			card.find('.card-body').append(component);
+			$('#webComponentTarget').append(card);
 		}
 
 
@@ -47,6 +61,7 @@
 				if(url && name) {
 					injectScript(url);
 					addComponent(name, parameters, content);
+					$('#webComponentForm')[0].reset();
 					$('#webComponentModal').modal('hide');
 				} else {
 					window.alert('Please enter name and url!');
