@@ -13,7 +13,7 @@ Check it out here:
 
 https://jpchip.github.io/web-component-loader/
 
-### Example Components:
+### Example Web Components:
 
 #### [ui-avatar](https://www.npmjs.com/package/ui-avatar)
 - URL: `https://unpkg.com/ui-avatar@0.0.3/dist/uiavatar.js`
@@ -25,6 +25,13 @@ https://jpchip.github.io/web-component-loader/
 - URL: `https://unpkg.com/stencil-voice2text@latest/dist/voice2text.js`
 - Name: `st-voice2text`
 - Content: `<input type="text"></input>`
+
+##### [Polymer](https://www.polymer-project.org/) web components can be loaded too!
+
+#### [paper-button](https://www.webcomponents.org/element/PolymerElements/paper-button)
+- URL: `https://cdn.rawgit.com/download/polymer-cdn/2.6.0/lib/paper-button/paper-button.html`
+- Name: `paper-button`
+- Content: `Hello World`
 
 ## Developing
 
@@ -47,7 +54,7 @@ Load up site at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 - [ ] Add each component as a widget in a dashboard
 - [x] Store added components in local storage
 - [ ] Allow editing component parameters and content
-- [ ] Add support for polymer based components (ie. html) 
+- [x] Add support for polymer based components (ie. html) 
 - [ ] Add onload/onerror handlers
 - [ ] Allow removing single component
 - [ ] Import/Export components 

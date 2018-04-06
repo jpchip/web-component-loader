@@ -34,11 +34,29 @@
 
 	<script type="text/javascript">
 		function injectScript(url) {
-			var head= document.getElementsByTagName('head')[0];
-			var script= document.createElement('script');
-			script.type= 'text/javascript';
+			var head = document.getElementsByTagName('head')[0];
+			var script = document.createElement('script');
+			script.type = 'text/javascript';
 			script.src= url;
 			head.appendChild(script);
+		}
+
+		function injectLink(url) {
+			var head = document.getElementsByTagName('head')[0];
+			var link = document.createElement('link');
+			link.rel = 'import';
+			link.href = url;
+			head.appendChild(link);
+		}
+
+		function injectComponent(url) {
+			var re = /(?:\.([^.]+))?$/;
+			var ext = re.exec(url)[1];
+			if(ext === 'html') {
+				injectLink(url);
+			} else {
+				injectScript(url);
+			}
 		}
 
 		function addComponent(name, parameters, content) {
@@ -63,7 +81,7 @@
 			if (componentsStr) {
 				var components = JSON.parse(componentsStr);
 				components.forEach(function (component) {
-					injectScript(component.url);
+					injectComponent(component.url);
 					addComponent(component.name, component.parameters, component.content);
 				});
 			}
@@ -106,7 +124,7 @@
 				});
 
 				if(url && name) {
-					injectScript(url);
+					injectComponent(url);
 					addComponent(name, parameters, content);
 					saveComponent({url: url, name: name, parameters: parameters, content: content});
 					resetForm();
@@ -138,6 +156,8 @@
 		});
 
 	</script>
+
+	<base href="https://cdn.rawgit.com/download/polymer-cdn/2.6.0/lib/">
 
 	<title>Web Component Loader</title>
 </head>
