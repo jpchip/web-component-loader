@@ -26,7 +26,13 @@ https://jpchip.github.io/web-component-loader/
 - Name: `st-voice2text`
 - Content: `<input type="text"></input>`
 
-##### [Polymer](https://www.polymer-project.org/) web components can be loaded too!
+##### Vanilla web components in HTML can be loaded too:
+
+#### [solar-system](https://github.com/wilk/vanilla-web-components)
+- URL: `https://raw.githubusercontent.com/wilk/vanilla-web-components/master/src/components/solar-system/solar-system.html`
+- Name: 'solar-system'
+
+##### [Polymer](https://www.polymer-project.org/) web components also work:
 
 #### [paper-button](https://www.webcomponents.org/element/PolymerElements/paper-button)
 - URL: `https://cdn.rawgit.com/download/polymer-cdn/2.6.0/lib/paper-button/paper-button.html`
