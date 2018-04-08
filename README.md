@@ -29,7 +29,7 @@ https://jpchip.github.io/web-component-loader/
 ##### Vanilla web components in HTML can be loaded too:
 
 #### [solar-system](https://github.com/wilk/vanilla-web-components)
-- URL: `https://raw.githubusercontent.com/wilk/vanilla-web-components/master/src/components/solar-system/solar-system.html`
+- URL: `https://rawgit.com/wilk/vanilla-web-components/master/src/components/solar-system/solar-system.html`
 - Name: 'solar-system'
 
 ##### [Polymer](https://www.polymer-project.org/) web components also work:
@@ -61,7 +61,7 @@ Load up site at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 - [x] Store added components in local storage
 - [ ] Allow editing component parameters and content
 - [x] Add support for polymer based components (ie. html) 
-- [ ] Add onload/onerror handlers
+- [x] Add onload/onerror handlers
 - [ ] Allow removing single component
 - [ ] Import/Export components 
 - [ ] Allow adding components from a pre-defined library (ie. components.json)

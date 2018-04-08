@@ -33,30 +33,50 @@
 	</script>
 
 	<script type="text/javascript">
-		function injectScript(url) {
+		function injectScript(url, onLoad, onError) {
 			var head = document.getElementsByTagName('head')[0];
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
 			script.src= url;
+			if (onLoad) {
+				script.onload = onLoad;
+			}
+			if (onError) {
+				script.onerror = onError;
+			}
 			head.appendChild(script);
 		}
 
-		function injectLink(url) {
+		function injectLink(url, onLoad, onError) {
 			var head = document.getElementsByTagName('head')[0];
 			var link = document.createElement('link');
 			link.rel = 'import';
 			link.href = url;
+			if (onLoad) {
+				link.onload = onLoad;
+			}
+			if (onError) {
+				link.onerror = onError;
+			}
 			head.appendChild(link);
 		}
 
-		function injectComponent(url) {
+		function injectComponent(url, onLoad, onError) {
 			var re = /(?:\.([^.]+))?$/;
 			var ext = re.exec(url)[1];
 			if(ext === 'html') {
-				injectLink(url);
+				injectLink(url, onLoad, onError);
 			} else {
-				injectScript(url);
+				injectScript(url, onLoad, onError);
 			}
+		}
+
+		function addCard(title, body) {
+			var card = $('#templateWebComponentCard').html();
+			card = $('<div/>').html(card).contents();
+			card.find('.card-header').text(title);
+			card.find('.card-body').append(body);
+			$('#webComponentTarget').append(card);
 		}
 
 		function addComponent(name, parameters, content) {
@@ -69,11 +89,7 @@
 			if (content) {
 				component.innerHTML = content;
 			}
-			var card = $('#templateWebComponentCard').html();
-			card = $('<div/>').html(card).contents();
-			card.find('.card-header').text(name);
-			card.find('.card-body').append(component);
-			$('#webComponentTarget').append(card);
+			addCard(name, component);
 		}
 
 		function loadComponents() {
@@ -81,8 +97,11 @@
 			if (componentsStr) {
 				var components = JSON.parse(componentsStr);
 				components.forEach(function (component) {
-					injectComponent(component.url);
-					addComponent(component.name, component.parameters, component.content);
+					injectComponent(component.url, function() {
+						addComponent(component.name, component.parameters, component.content);
+					}, function () {
+						addCard(component.name, $('<div class="alert alert-danger">Failed to load component.</div>'));
+					});
 				});
 			}
 		}
@@ -124,9 +143,12 @@
 				});
 
 				if(url && name) {
-					injectComponent(url);
-					addComponent(name, parameters, content);
-					saveComponent({url: url, name: name, parameters: parameters, content: content});
+					injectComponent(url, function() {
+						addComponent(name, parameters, content);
+						saveComponent({url: url, name: name, parameters: parameters, content: content});
+					}, function (e) {
+						addCard(name, $('<div class="alert alert-danger">Failed to load component.</div>'));
+					});
 					resetForm();
 					$('#webComponentModal').modal('hide');
 				} else {
@@ -156,8 +178,6 @@
 		});
 
 	</script>
-
-	<base href="https://cdn.rawgit.com/download/polymer-cdn/2.6.0/lib/">
 
 	<title>Web Component Loader</title>
 </head>
@@ -223,9 +243,6 @@
 		</div>
 	</div>
 </div>
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
