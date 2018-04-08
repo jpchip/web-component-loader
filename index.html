@@ -20,6 +20,9 @@
 			<div class="card-body">
 
 			</div>
+			<div class="card-footer">
+
+			</div>
 		</div>
 	</script>
 
@@ -38,6 +41,12 @@
 
 	<script type="text/javascript">
 		function injectScript(url, onLoad, onError) {
+			if (document.querySelector('script[src="' + url + '"]')) {
+				if (onLoad) {
+					onLoad();
+				}
+				return;
+			}
 			var head = document.getElementsByTagName('head')[0];
 			var script = document.createElement('script');
 			script.type = 'text/javascript';
@@ -52,6 +61,12 @@
 		}
 
 		function injectLink(url, onLoad, onError) {
+			if (document.querySelector('link[href="' + url + '"]')) {
+				if (onLoad) {
+					onLoad();
+				}
+				return;
+			}
 			var head = document.getElementsByTagName('head')[0];
 			var link = document.createElement('link');
 			link.rel = 'import';
@@ -75,11 +90,17 @@
 			}
 		}
 
-		function addCard(title, body, onClose) {
+		function addCard(title, body, footer, onClose) {
 			var card = $('#templateWebComponentCard').html();
 			card = $('<div/>').html(card).contents();
 			card.find('.card-header h5').text(title);
 			card.find('.card-body').append(body);
+			if (footer) {
+				card.find('.card-footer').append(footer);
+			} else {
+				card.find('.card-footer').remove();
+			}
+
 			card.find('.close').on('click', function () {
 				$(this).closest('.card').remove();
 				if (onClose) {
@@ -87,9 +108,30 @@
 				}
 			});
 			$('#webComponentTarget').append(card);
+
+			return card;
 		}
 
-		function addComponent(component) {
+		function addParameter(key, value) {
+			var fields = $('#templateWebComponentParameters').html();
+			fields = $('<div/>').html(fields).contents();
+
+			if (key) {
+				fields.find('#key').val(key);
+			}
+			if (value) {
+				fields.find('#value').val(value);
+			}
+
+			fields.find(":input").each(function() {
+				var index = $(".parameter-set").length;
+				$(this).attr("id", $(this).attr("id") + index);
+				$(this).attr("name", $(this).attr("name") + index);
+			});
+			$('#parametersFieldSet').append(fields);
+		}
+
+		function createComponentElement(component) {
 			var componentEl = document.createElement(component.name);
 
 			if (component.parameters) {
@@ -100,9 +142,20 @@
 			if (component.content) {
 				componentEl.innerHTML = component.content;
 			}
-			addCard(component.name, componentEl, function () {
+			return componentEl;
+		}
+
+		function addComponent(component) {
+			var componentEl = createComponentElement(component);
+
+			var editBtn = $('<button class="btn btn-sm btn-secondary">Edit</button>').on('click', function () {
+				editComponent(component);
+			});
+
+			var card = addCard(component.name, componentEl, editBtn, function () {
 				deleteComponent(component);
 			});
+			card.attr('id', component.id);
 		}
 
 		function loadComponentsFromStorage() {
@@ -112,6 +165,22 @@
 				components = JSON.parse(componentsStr);
 			}
 			return components;
+		}
+
+		function findComponentIndex(component, components) {
+			var foundComponentIndex = -1;
+			components.forEach(function(c, index) {
+				if(component.id && c.id) {
+					if(component.id === c.id) {
+						foundComponentIndex = index;
+					}
+				} else {
+					if (c.url === component.url && c.name === component.name && c.content === component.content) {
+						foundComponentIndex = index;
+					}
+				}
+			});
+			return foundComponentIndex;
 		}
 
 		function loadComponents() {
@@ -127,22 +196,35 @@
 
 		function saveComponent(component) {
 			var components = loadComponentsFromStorage();
-			components.push(component);
+			var foundComponentIndex = findComponentIndex(component, components);
+			if (foundComponentIndex !== -1) {
+				components[foundComponentIndex] = component;
+			} else {
+				components.push(component);
+			}
+
 			localStorage.setItem("components", JSON.stringify(components));
 		}
 
 		function deleteComponent(component) {
 			var components = loadComponentsFromStorage();
-			var foundComponentIndex = -1;
-			components.forEach(function(c, index) {
-				if (c.url === component.url && c.name === component.name) {
-					foundComponentIndex = index;
-				}
-			});
+			var foundComponentIndex = findComponentIndex(component, components);
 			if (foundComponentIndex !== -1) {
 				components.splice(foundComponentIndex, 1);
 				localStorage.setItem("components", JSON.stringify(components));
 			}
+		}
+
+		function editComponent(component) {
+			var $modal = $('#webComponentModal');
+			$('#id').val(component.id);
+			$('#url').val(component.url).attr('readonly', true);
+			$('#name').val(component.name).attr('readonly', true);
+			component.parameters.forEach(function (parameter) {
+				addParameter(parameter.key, parameter.value);
+			});
+			$('#content').val(component.content);
+			$modal.modal('show');
 		}
 
 		function clearComponents() {
@@ -152,14 +234,16 @@
 
 		function resetForm() {
 			$('#webComponentForm')[0].reset();
+			$('#url').attr('readonly', false);
+			$('#name').attr('readonly', false);
 			$(".parameter-set").remove();
 		}
 
 		$(function() {
 			loadComponents();
 
-
 			$('#saveComponent').on('click', function () {
+				var id = $('#id').val();
 				var url = $('#url').val();
 				var name = $('#name').val();
 				var content = $('#content').val();
@@ -171,30 +255,32 @@
 					parameters.push({key: key, value: value});
 				});
 
-				if(url && name) {
-					var component = {url: url, name: name, parameters: parameters, content: content};
-					injectComponent(url, function() {
-						addComponent(component);
-						saveComponent(component);
-					}, function () {
-						addCard(name, $('<div class="alert alert-danger">Failed to load component.</div>'));
-					});
+				if (id) {
+					var component = {id: parseInt(id, 10), url: url, name: name, parameters: parameters, content: content};
+					var componentEl = createComponentElement(component);
+					$('#' + component.id).find('.card-body').html(componentEl);
+					saveComponent(component);
 					resetForm();
 					$('#webComponentModal').modal('hide');
 				} else {
-					window.alert('Please enter name and url!');
+					if (url && name) {
+						var component = {id: Date.now(), url: url, name: name, parameters: parameters, content: content};
+						injectComponent(url, function() {
+							addComponent(component);
+							saveComponent(component);
+						}, function () {
+							addCard(name, $('<div class="alert alert-danger">Failed to load component.</div>'));
+						});
+						resetForm();
+						$('#webComponentModal').modal('hide');
+					} else {
+						window.alert('Please enter name and url!');
+					}
 				}
 			});
 
 			$('#addParameter').on('click', function () {
-				var fields = $('#templateWebComponentParameters').html();
-				fields = $('<div/>').html(fields).contents();
-				fields.find(":input").each(function() {
-					var index = $(".parameter-set").length;
-					$(this).attr("id", $(this).attr("id") + index);
-					$(this).attr("name", $(this).attr("name") + index);
-				});
-				$('#parametersFieldSet').append(fields);
+				addParameter();
 			});
 
 			$('#resetBtn').on('click', function () {
@@ -239,6 +325,7 @@
 			</div>
 			<div class="modal-body">
 				<form id="webComponentForm">
+					<input type="hidden" id="id" name="id" value="">
 					<div class="form-group">
 						<label for="url">URL</label>
 						<input id="url" name="url" type="text" class="form-control"  aria-describedby="urlHelp" placeholder="Enter URL">

@@ -56,7 +56,7 @@ Load up site at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 - [x] Allow adding more than one component
 - [ ] Add each component as a widget in a dashboard
 - [x] Store added components in local storage
-- [ ] Allow editing component parameters and content
+- [x] Allow editing component parameters and content
 - [x] Add support for polymer based components (ie. html) 
 - [x] Add onload/onerror handlers
 - [x] Allow removing single component
