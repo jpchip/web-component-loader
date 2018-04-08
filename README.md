@@ -1,8 +1,10 @@
 # web-component-loader
-> Test your web component here
+> Test your web components here!
 
-Simple page that let's you load up a web component from a cdn or unpkg.com 
-on the fly and view them. Added component info is saved to local storage for
+Have you ever stumbled across a web component and wondered what it looked like? 
+
+This is a simple page that let's you load up a web component from a cdn or unpkg.com 
+on the fly and view it. Added components are saved to local storage for
 repeated viewing.
 
 This is just hacked together with jquery as a proof of concept.
@@ -26,11 +28,6 @@ https://jpchip.github.io/web-component-loader/
 - Name: `st-voice2text`
 - Content: `<input type="text"></input>`
 
-##### Vanilla web components in HTML can be loaded too:
-
-#### [solar-system](https://github.com/wilk/vanilla-web-components)
-- URL: `https://rawgit.com/wilk/vanilla-web-components/master/src/components/solar-system/solar-system.html`
-- Name: 'solar-system'
 
 ##### [Polymer](https://www.polymer-project.org/) web components also work:
 
@@ -62,7 +59,7 @@ Load up site at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 - [ ] Allow editing component parameters and content
 - [x] Add support for polymer based components (ie. html) 
 - [x] Add onload/onerror handlers
-- [ ] Allow removing single component
+- [x] Allow removing single component
 - [ ] Import/Export components 
 - [ ] Allow adding components from a pre-defined library (ie. components.json)
 

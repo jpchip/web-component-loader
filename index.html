@@ -12,6 +12,10 @@
 	<script id="templateWebComponentCard" type="text/template">
 		<div class="card mt-1">
 			<div class="card-header">
+				<button type="button" class="close float-right" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h5></h5>
 			</div>
 			<div class="card-body">
 
@@ -71,49 +75,74 @@
 			}
 		}
 
-		function addCard(title, body) {
+		function addCard(title, body, onClose) {
 			var card = $('#templateWebComponentCard').html();
 			card = $('<div/>').html(card).contents();
-			card.find('.card-header').text(title);
+			card.find('.card-header h5').text(title);
 			card.find('.card-body').append(body);
+			card.find('.close').on('click', function () {
+				$(this).closest('.card').remove();
+				if (onClose) {
+					onClose();
+				}
+			});
 			$('#webComponentTarget').append(card);
 		}
 
-		function addComponent(name, parameters, content) {
-			var component = document.createElement(name);
-			if (parameters) {
-				parameters.forEach(function (p) {
-					component[p.key] = p.value;
+		function addComponent(component) {
+			var componentEl = document.createElement(component.name);
+
+			if (component.parameters) {
+				component.parameters.forEach(function (p) {
+					componentEl[p.key] = p.value;
 				});
 			}
-			if (content) {
-				component.innerHTML = content;
+			if (component.content) {
+				componentEl.innerHTML = component.content;
 			}
-			addCard(name, component);
+			addCard(component.name, componentEl, function () {
+				deleteComponent(component);
+			});
 		}
 
-		function loadComponents() {
-			var componentsStr = localStorage.getItem("components");
-			if (componentsStr) {
-				var components = JSON.parse(componentsStr);
-				components.forEach(function (component) {
-					injectComponent(component.url, function() {
-						addComponent(component.name, component.parameters, component.content);
-					}, function () {
-						addCard(component.name, $('<div class="alert alert-danger">Failed to load component.</div>'));
-					});
-				});
-			}
-		}
-
-		function saveComponent(component) {
+		function loadComponentsFromStorage() {
 			var components = [];
 			var componentsStr = localStorage.getItem("components");
 			if (componentsStr) {
 				components = JSON.parse(componentsStr);
 			}
+			return components;
+		}
+
+		function loadComponents() {
+			var components = loadComponentsFromStorage();
+			components.forEach(function (component) {
+				injectComponent(component.url, function() {
+					addComponent(component);
+				}, function () {
+					addCard(component.name, $('<div class="alert alert-danger">Failed to load component.</div>'));
+				});
+			});
+		}
+
+		function saveComponent(component) {
+			var components = loadComponentsFromStorage();
 			components.push(component);
 			localStorage.setItem("components", JSON.stringify(components));
+		}
+
+		function deleteComponent(component) {
+			var components = loadComponentsFromStorage();
+			var foundComponentIndex = -1;
+			components.forEach(function(c, index) {
+				if (c.url === component.url && c.name === component.name) {
+					foundComponentIndex = index;
+				}
+			});
+			if (foundComponentIndex !== -1) {
+				components.splice(foundComponentIndex, 1);
+				localStorage.setItem("components", JSON.stringify(components));
+			}
 		}
 
 		function clearComponents() {
@@ -143,10 +172,11 @@
 				});
 
 				if(url && name) {
+					var component = {url: url, name: name, parameters: parameters, content: content};
 					injectComponent(url, function() {
-						addComponent(name, parameters, content);
-						saveComponent({url: url, name: name, parameters: parameters, content: content});
-					}, function (e) {
+						addComponent(component);
+						saveComponent(component);
+					}, function () {
 						addCard(name, $('<div class="alert alert-danger">Failed to load component.</div>'));
 					});
 					resetForm();
