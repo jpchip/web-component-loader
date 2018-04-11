@@ -193,15 +193,22 @@
 			return foundComponentIndex;
 		}
 
-		function loadComponents() {
-			var components = loadComponentsFromStorage();
-			components.forEach(function (component) {
+		function loadComponentsRecursive(index, components) {
+			var component = components[index];
+			if (component) {
 				injectComponent(component.url, function() {
 					addComponent(component);
+					loadComponentsRecursive(index + 1, components);
 				}, function () {
 					addCard(component.name, $('<div class="alert alert-danger">Failed to load component.</div>'));
+					loadComponentsRecursive(index + 1, components);
 				});
-			});
+			}
+		}
+
+		function loadComponents() {
+			var components = loadComponentsFromStorage();
+			loadComponentsRecursive(0, components);
 		}
 
 		function saveComponent(component) {
