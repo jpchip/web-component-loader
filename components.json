@@ -63,5 +63,18 @@
 			"value": "USD"
 		}],
 		"content": ""
+	},
+	{
+		"url": "https://unpkg.com/web-photo-filter@1.0.2/dist/webphotofilter.js",
+		"src": "https://github.com/peterpeterparker/web-photo-filter",
+		"name": "web-photo-filter",
+		"parameters": [{
+			"key": "filter",
+			"value": "sepia"
+		}, {
+			"key": "src",
+			"value": "images/snowman.jpg"
+		}],
+		"content": ""
 	}
 ]
