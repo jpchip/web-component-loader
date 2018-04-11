@@ -8,7 +8,7 @@ on the fly and view it. Added components are saved to local storage for
 repeated viewing.
 
 There's also a small library of web components I've found already to tinker
-with. If you know you know any cool ones I should add, please [submit a PR](https://github.com/jpchip/web-component-loader/pulls)!
+with. If you know of any cool ones I should add, please add them to [components.json](https://github.com/jpchip/web-component-loader/blob/master/components.json) and [submit a PR](https://github.com/jpchip/web-component-loader/pulls)!
 
 This is just hacked together with jquery as a proof of concept.
 
