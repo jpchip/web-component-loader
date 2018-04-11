@@ -1,7 +1,7 @@
 # Web Component Loader
 > Test your web components here!
 
-Have you ever stumbled across a web component and wondered what it looked like? 
+Have you ever stumbled across a [web component](https://developer.mozilla.org/en-US/docs/Web/Web_Components) and wondered what it looked like? 
 
 This is a simple page that let's you load up a web component from a cdn or unpkg.com 
 on the fly and view it. Added components are saved to local storage for
