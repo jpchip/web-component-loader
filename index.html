@@ -1,13 +1,12 @@
 <!doctype html>
 <html lang="en">
 <head>
-	<!-- Required meta tags -->
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
 	<script id="templateWebComponentCard" type="text/template">
 		<div class="card mt-1">
@@ -26,6 +25,13 @@
 		</div>
 	</script>
 
+	<script id="templateWebComponentListItem" type="text/template">
+		<a class="list-group-item list-group-item-action">
+			<h5></h5>
+			<small class="text-muted"></small>
+		</a>
+	</script>
+
 	<script id="templateWebComponentParameters" type="text/template">
 		<div class="form-row parameter-set">
 			<div class="col-md-6 mb-3">
@@ -40,6 +46,8 @@
 	</script>
 
 	<script type="text/javascript">
+		var libraryComponents = [];
+
 		function injectScript(url, onLoad, onError) {
 			if (document.querySelector('script[src="' + url + '"]')) {
 				if (onLoad) {
@@ -234,6 +242,7 @@
 
 		function resetForm() {
 			$('#webComponentForm')[0].reset();
+			$('#id').val('');
 			$('#url').attr('readonly', false);
 			$('#name').attr('readonly', false);
 			$(".parameter-set").remove();
@@ -289,8 +298,52 @@
 
 			$('#webComponentModal').on('hide.bs.modal', function (e) {
 				resetForm();
-			})
+			});
 
+			$('#libraryBtn').on('click', function() {
+				$.get('components.json', function(data) {
+					libraryComponents = data;
+					$('#componentList').html('');
+					data.sort(function(a, b) {
+						if(a.name < b.name) return -1;
+						if(a.name > b.name) return 1;
+						return 0;
+					});
+					data.forEach(function (component) {
+						var listItem = $('#templateWebComponentListItem').html();
+						listItem = $('<div/>').html(listItem).contents();
+						listItem.data('componentName', component.name);
+						listItem.find('h5').text(component.name);
+						listItem.find('small').text(component.src);
+						listItem.on('click', function () {
+							$('#componentList .list-group-item').removeClass('active');
+							$(this).addClass('active');
+						});
+						$('#componentList').append(listItem);
+						$('#componentLibraryModal').modal('show');
+					});
+				});
+			});
+
+			$('#loadLibraryComponent').on('click', function (e) {
+				var componentName = $('#componentList').find('.list-group-item.active').data('componentName');
+				if (!componentName) {
+					alert('Select a component!');
+					return;
+				}
+				var component = null;
+				libraryComponents.forEach(function (c) {
+					if(c.name === componentName) {
+						component = c;
+					}
+				});
+				if (component) {
+					$('#componentLibraryModal').modal('hide');
+					editComponent(component);
+				} else {
+					alert('Could not find selected component?');
+				}
+			});
 		});
 
 	</script>
@@ -301,6 +354,7 @@
 <nav class="navbar navbar-dark bg-dark">
 	<form class="form-inline">
 		<button class="btn btn-primary mr-2" type="button" data-toggle="modal" data-target="#webComponentModal">Add Web Component</button>
+		<button id="libraryBtn" class="btn btn-primary mr-2" type="button">Library</button>
 		<button id="resetBtn" class="btn btn-default" type="button">Reset</button>
 	</form>
 </nav>
@@ -355,6 +409,28 @@
 			</div>
 			<div class="modal-footer">
 				<button id="saveComponent" type="button" class="btn btn-primary">Save</button>
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="componentLibraryModal" class="modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">Component Library</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body" style="max-height: 500px; overflow-y: auto;">
+				<ul id="componentList" class="list-group" >
+
+				</ul>
+			</div>
+			<div class="modal-footer">
+				<button id="loadLibraryComponent" type="button" class="btn btn-primary">Load</button>
 				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 			</div>
 		</div>

@@ -1,0 +1,67 @@
+[
+	{
+		"url": "https://unpkg.com/ui-avatar@0.0.3/dist/uiavatar.js",
+		"src" : "https://github.com/soapdog/webcomponent-ui-avatar",
+		"name": "ui-avatar",
+		"parameters": [{
+			"key": "name",
+			"value": "j c"
+		}, {
+			"key": "rounded",
+			"value": "true"
+		}],
+		"content": ""
+	},
+	{
+		"url": "https://unpkg.com/stencil-voice2text@latest/dist/voice2text.js",
+		"src": "https://github.com/Fdom92/stencil-voice2text",
+		"name": "st-voice2text",
+		"parameters": [{
+			"key": "enabled",
+			"value": "true"
+		}],
+		"content": "<input type=\"text\"></input>"
+	},
+	{
+		"url": "https://unpkg.com/lazy-iframe@0.0.3/dist/lazyiframe.js",
+		"src": "https://github.com/jgw96/lazy-iframe",
+		"name": "lazy-iframe",
+		"parameters": [{
+			"key": "src",
+			"value": "https://www.youtube.com/embed/UfD-k7aHkQE"
+		}, {
+			"key": "title",
+			"value": "video"
+		}],
+		"content": ""
+	},
+	{
+		"url": "https://unpkg.com/web-share@0.0.2/dist/webshare.js",
+		"src": "https://github.com/jgw96/web-share",
+		"name": "web-share",
+		"parameters": [{
+			"key": "title",
+			"value": "web fundamentals"
+		}, {
+			"key": "text",
+			"value": "Check out Web Fundamentals — it rocks!"
+		}, {
+			"key": "url",
+			"value": "https://developers.google.com/web"
+		}],
+		"content": "Click Me!"
+	},
+	{
+		"url": "https://unpkg.com/cryptocurrency-data@0.0.3/dist/cryptocurrencydata.js",
+		"src": "https://github.com/OnnoGeorg/cryptocurrency-data",
+		"name": "cryptocurrency-data",
+		"parameters": [{
+			"key": "coin",
+			"value": "BTC"
+		}, {
+			"key": "show",
+			"value": "USD"
+		}],
+		"content": ""
+	}
+]

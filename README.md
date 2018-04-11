@@ -1,4 +1,4 @@
-# web-component-loader
+# Web Component Loader
 > Test your web components here!
 
 Have you ever stumbled across a web component and wondered what it looked like? 
@@ -6,6 +6,9 @@ Have you ever stumbled across a web component and wondered what it looked like?
 This is a simple page that let's you load up a web component from a cdn or unpkg.com 
 on the fly and view it. Added components are saved to local storage for
 repeated viewing.
+
+There's also a small library of web components I've found already to tinker
+with. If you know you know any cool ones I should add, please [submit a PR](https://github.com/jpchip/web-component-loader/pulls)!
 
 This is just hacked together with jquery as a proof of concept.
 
@@ -61,7 +64,7 @@ Load up site at [http://127.0.0.1:8080](http://127.0.0.1:8080).
 - [x] Add onload/onerror handlers
 - [x] Allow removing single component
 - [ ] Import/Export components 
-- [ ] Allow adding components from a pre-defined library (ie. components.json)
+- [x] Allow adding components from a pre-defined library (ie. components.json)
 
 ## Licensing
 
