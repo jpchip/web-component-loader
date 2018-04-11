@@ -44,10 +44,10 @@
 			"value": "web fundamentals"
 		}, {
 			"key": "text",
-			"value": "Check out Web Fundamentals — it rocks!"
+			"value": "Check out Web Component Loader — it rocks!"
 		}, {
 			"key": "url",
-			"value": "https://developers.google.com/web"
+			"value": "https://github.com/jpchip/web-component-loader"
 		}],
 		"content": "Click Me!"
 	},
