@@ -31,6 +31,7 @@ https://jpchip.github.io/web-component-loader/
 - Name: `st-voice2text`
 - Content: `<input type="text"></input>`
 
+Find many more components to try at [https://stencilcomponents.com/](https://stencilcomponents.com/).
 
 ##### [Polymer](https://www.polymer-project.org/) web components also work:
 
