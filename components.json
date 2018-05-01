@@ -86,7 +86,36 @@
 			"value": "{           \"color\": \"#425cef\",           \"dataPoints\":[               { \"x\": \"2012-01-01\", \"y\": 450 },               { \"x\": \"2012-01-02\", \"y\": 414 },               { \"x\": \"2012-01-03\", \"y\": 520 },               { \"x\": \"2012-01-04\", \"y\": 460 },               { \"x\": \"2012-01-05\", \"y\": 450 },               { \"x\": \"2012-01-06\", \"y\": 500 },               { \"x\": \"2012-01-07\", \"y\": 480 },               { \"x\": \"2012-01-08\", \"y\": 480 },               { \"x\": \"2012-01-09\", \"y\": 410 },               { \"x\": \"2012-01-10\", \"y\": 500 },               { \"x\": \"2012-01-11\", \"y\": 480 },               { \"x\": \"2012-01-12\", \"y\": 510 }]}"
 		}, {
 			"key": "ctitle",
-			"value": "Basic Line Chart (too wide)"
+			"value": "Basic Line Chart"
+		}],
+		"content": ""
+	},
+	{
+		"url": "https://unpkg.com/am-rating@0.0.6/dist/am-rating.js",
+		"src": "https://github.com/alasdairmackenzie/am-rating",
+		"name": "am-rating",
+		"parameters": [{
+			"key": "rating",
+			"value": "1.5"
+		}],
+		"content": ""
+	},
+	{
+		"url": "https://unpkg.com/lottie-wc/dist/lottie.js",
+		"src": "https://github.com/splitinfinities/lottie-wc",
+		"name": "lottie-animation",
+		"parameters": [{
+			"key": "src",
+			"value": "images/lottie_logo.json"
+		}, {
+			"key": "autoplay",
+			"value": "true"
+		}, {
+			"key": "loop",
+			"value": "true"
+		}, {
+			"key": "controls",
+			"value": "true"
 		}],
 		"content": ""
 	}

@@ -1,0 +1,16 @@
+
+.list-group-item-action {
+	cursor: pointer;
+}
+
+.list-group-item.active .text-muted {
+	color: #ccc !important;
+}
+
+/* overrides for jeep-linechart */
+:root {
+	--chart-width: 600px;
+	--chart-height: 400px;
+}
+
+
