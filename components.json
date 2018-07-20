@@ -118,5 +118,15 @@
 			"value": "true"
 		}],
 		"content": ""
-	}
+	},
+	{
+	"url": "https://unpkg.com/node-package@1.2.0/dist/node-package.min.js",
+	"src": "https://github.com/abraham/node-package",
+	"name": "node-package",
+	"parameters": [{
+		"key": "name",
+		"value": "lodash"
+	}],
+	"content": ""
+}
 ]
